@@ -1,6 +1,6 @@
 import json
 import requests
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 
 app = Flask(__name__)
 
@@ -93,6 +93,10 @@ def report_link():
 @app.route('/about')
 def about():
     return render_template("about.html")
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(app.root_path, 'assets/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/contact', methods=['POST'])
 def contact():
