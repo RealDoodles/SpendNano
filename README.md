@@ -17,4 +17,4 @@ You can edit data.json with sites you know that accept Nano, and we will approve
 
 # To Do
 - [x] Add a favicon
-- [ ] Change up design of About and Contact pages to match home page
+- [x] Change up design of About and Contact pages to match home page
