@@ -19,6 +19,10 @@ def home():
 def contactpage():
     return render_template("contact.html")
 
+@app.route('/addlink')
+def contactpage():
+    return render_template("addlink.html")
+
 @app.route('/about')
 def about():
     return render_template("about.html")
