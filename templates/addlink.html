@@ -61,19 +61,33 @@
     <div class="container mt-5">
         <h1>Add a Link</h1>
         <form>
-            <div class="form-group">
-                <label for="linkName">Link Name</label>
-                <input type="text" class="form-control" id="linkName" placeholder="Enter link name">
-            </div>
-            <div class="form-group">
-                <label for="linkUrl">Link URL</label>
-                <input type="text" class="form-control" id="linkUrl" placeholder="Enter link URL">
-            </div>
-            <div class="form-group">
-                <label for="linkDescription">Link Description</label>
-                <textarea class="form-control" id="linkDescription" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+          <div class="form-group">
+              <label for="linkName">Link Name</label>
+              <input type="text" class="form-control" id="linkName" placeholder="Enter link name">
+          </div>
+          <div class="form-group">
+              <label for="linkUrl">Link URL</label>
+              <input type="text" class="form-control" id="linkUrl" placeholder="Enter link URL">
+          </div>
+          <div class="form-group">
+              <label for="linkDescription">Link Description</label>
+              <textarea class="form-control" id="linkDescription" rows="3"></textarea>
+          </div>
+          <div id="linkError" style="color: red;"></div>
+          <button type="submit" class="btn btn-primary" onclick="return validateLink()">Submit</button>
+      </form>
+      
+      <script>
+      function validateLink() {
+          const link = document.querySelector("#linkUrl").value;
+          const errorMessage = document.querySelector("#linkError");
+          if (!link.startsWith("http")) {
+              errorMessage.textContent = "Invalid link format. Please enter a valid link that stats with http or https.";
+              return false;
+          }
+          errorMessage.textContent = "";
+          return true;
+      }
+      </script>
     </div>
 </body>

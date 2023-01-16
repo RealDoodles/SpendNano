@@ -1,7 +1,6 @@
 import json
 import requests
 from flask import Flask, render_template, request, jsonify
-from urllib.parse import urlparse
 
 app = Flask(__name__)
 
@@ -30,16 +29,27 @@ def add_link():
     title = data["title"]
     description = data["description"]
     link = data["link"]
-    if not urlparse(link).scheme:
-        link = "http://" + link
-    if not urlparse(link).netloc:
-        return "Invalid link format. Please enter a valid link"
     with open("data.json", "r") as json_file:
         json_data = json.load(json_file)
     new_link = {"title": title, "description": description, "link": link}
     json_data.append(new_link)
     with open("data.json", "w") as json_file:
         json.dump(json_data, json_file)
+    webhook_content = {
+        "embeds": [{
+            "color": 3066993,
+            "fields": [{
+                "name": "New Link Added",
+                "value": f"Title: {title}\nDescription: {description}\nLink: {link}"
+            }]
+        }],
+        "username": "Link Addition Bot"
+    }
+    result = requests.post(webhook, json=webhook_content)
+    try:
+        result.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        print(err)
     return "Link added successfully!"
 
 @app.route('/report', methods=['POST'])
