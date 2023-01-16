@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SpendNano</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const searchBox = document.querySelector("#search-input");
+        const websiteTable = document.querySelector("#website-table");
+        const noResults = document.querySelector("#no-results");
+        searchBox.addEventListener("keyup", (event) => {
+            const searchValue = event.target.value.toLowerCase();
+            const rows = websiteTable.querySelectorAll("tbody tr");
+            let visibleRows = 0;
+            rows.forEach((row) => {
+                const tds = row.querySelectorAll("td");
+                let match = false;
+                tds.forEach((td) => {
+                    if (td.textContent.toLowerCase().includes(searchValue)) {
+                        match = true;
+                    }
+                });
+                if (!match) {
+                    row.style.display = "none";
+                } else {
+                    row.style.display = "table-row";
+                    visibleRows++;
+                }
+            });
+            if (visibleRows === 0) {
+                noResults.style.display = "table-row";
+            } else {
+                noResults.style.display = "none";
+            }
+        });
+      });
+    </script>  
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Website Directory</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <main class="container">
+      <h1 class="text-center my-5">SpendNano</h1>
+      <div class="form-group my-5">
+        <input type="text" class="form-control" id="search-input" placeholder="Search for websites">
+      </div>
+      <table class="table table-striped" id="website-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          {% for website in websites %}
+            <tr>
+            <td>{{ website.title }}</td>
+            <td>{{ website.description }}</td>
+            <td><a href="{{ website.link }}">{{ website.link }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot id="no-results" style="display:none;">
+            <tr>
+                <td colspan="3" style="text-align:center; background-color:lightgray;">No Results Found</td>
+            </tr>
+        </tfoot>
+      </table>
+    </main>
+  </body>
+</html>
