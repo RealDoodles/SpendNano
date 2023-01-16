@@ -1,6 +1,7 @@
 import json
 import requests
 from flask import Flask, render_template, request, jsonify
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
@@ -29,6 +30,10 @@ def add_link():
     title = data["title"]
     description = data["description"]
     link = data["link"]
+    if not urlparse(link).scheme:
+        link = "http://" + link
+    if not urlparse(link).netloc:
+        return "Invalid link format. Please enter a valid link"
     with open("data.json", "r") as json_file:
         json_data = json.load(json_file)
     new_link = {"title": title, "description": description, "link": link}
@@ -36,6 +41,44 @@ def add_link():
     with open("data.json", "w") as json_file:
         json.dump(json_data, json_file)
     return "Link added successfully!"
+
+@app.route('/report', methods=['POST'])
+def report_link():
+    data = json.loads(request.data)
+    link_name = data["linkName"]
+    link_description = data["linkDescription"]
+    link_url = data["linkUrl"]
+
+    # Send message to webhook
+    webhook_content = {
+        "embeds": [
+            {
+                "title": "Reported Link",
+                "color": 16711680,
+                "fields": [
+                    {
+                        "name": "Link Name",
+                        "value": link_name
+                    },
+                    {
+                        "name": "Link Description",
+                        "value": link_description
+                    },
+                    {
+                        "name": "Link URL",
+                        "value": link_url
+                    }
+                ]
+            }
+        ],
+        "username": "Report Bot"
+    }
+    result = requests.post(webhook, json=webhook_content)
+    try:
+        result.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        print(err)
+    return jsonify({"message": "Link reported"}), 200
 
 @app.route('/about')
 def about():

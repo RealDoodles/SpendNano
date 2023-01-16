@@ -62,7 +62,7 @@
         </div>
       </nav>
   </header>
-    <main class="container">
+  <main class="container">
       <h1 class="text-center my-5">SpendNano</h1>
       <div class="form-group my-5">
         <input type="text" class="form-control" id="search-input" placeholder="Search for websites">
@@ -73,6 +73,7 @@
             <th>Title</th>
             <th>Description</th>
             <th>Link</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="rows">
@@ -81,6 +82,7 @@
             <td>{{ website.title }}</td>
             <td>{{ website.description }}</td>
             <td><a href="{{ website.link }}">{{ website.link }}</a></td>
+            <td><a href="#" onclick="reportLink(event)" class="text-danger">Report</a></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -91,5 +93,23 @@
         </tfoot>
       </table>
     </main>
+    <script>
+      function reportLink(event) {
+        event.preventDefault();
+        const linkName = event.target.parentElement.parentElement.firstElementChild.textContent;
+        const linkUrl = event.target.parentElement.parentElement.firstElementChild.nextElementSibling.textContent;
+        const linkDescription = event.target.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling.textContent;
+        const data = {linkName, linkUrl, linkDescription};
+        fetch('/report', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+        });
+      }
+    </script>    
   </body>
 </html>
