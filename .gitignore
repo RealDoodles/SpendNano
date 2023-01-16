@@ -112,7 +112,6 @@ venv.bak/
 
 # Config and data file
 /config.json
-/data.json
 
 # Spyder project settings
 .spyderproject
