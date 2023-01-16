@@ -14,3 +14,7 @@ Flask can easily be installed with ``pip`` and requires minimal dependancies to 
 
 # Contributions
 You can edit data.json with sites you know that accept Nano, and we will approve them to be added to the main website!
+
+# To Do
+- [ ] Add a favicon
+- [ ] Change up design of About and Contact pages to match home page
